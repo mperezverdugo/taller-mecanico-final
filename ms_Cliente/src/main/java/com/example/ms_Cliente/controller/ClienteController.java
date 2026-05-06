@@ -1,6 +1,5 @@
 package com.example.ms_Cliente.controller;
 
-import com.example.ms_Cliente.exception.RecursoNoEncontradoException;
 import com.example.ms_Cliente.model.Cliente;
 import com.example.ms_Cliente.service.ClienteService;
 import jakarta.validation.Valid;
@@ -13,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/clientes")
 @RequiredArgsConstructor
-
 public class ClienteController {
+
     private final ClienteService clienteService;
 
     @GetMapping
@@ -26,27 +25,26 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Cliente> crear(@Valid @RequestBody Cliente cliente) {
+        // Código 201 Created para creaciones exitosas
         return ResponseEntity.status(201).body(clienteService.guardar(cliente));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscar(@PathVariable Long id) {
-        return clienteService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        // El Service se encarga de lanzar el 404 si no existe
+        return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        // 1. Buscamos al cliente. Si no existe, lanzamos nuestro "grito" personalizado.
-        clienteService.obtenerPorId(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("No se puede eliminar: El cliente con ID " + id + " no existe."));
-
-        // 2. Si el código llega aquí, significa que el cliente sí existe. Procedemos a borrarlo.
         clienteService.eliminar(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
 
-        // 3. Respondemos con un 204 (No Content), que significa "Listo, lo borré y no tengo nada más que mostrarte".
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> actualizar(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
+        // Delega la lógica al Service y retorna el cliente actualizado con HTTP 200.
+        Cliente clienteActualizado = clienteService.actualizar(id, cliente);
+        return ResponseEntity.ok(clienteActualizado);
     }
 }
-
