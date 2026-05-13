@@ -3,5 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ms_Automovil/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms_Cliente/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ms_EurekaServer/src/main/java" charset="UTF-8" />
   </component>
 </project>
