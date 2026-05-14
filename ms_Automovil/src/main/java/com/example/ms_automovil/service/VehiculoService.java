@@ -15,6 +15,7 @@ public class VehiculoService {
     private VehiculoRepository vehiculoRepository;
 
     public List<Vehiculo> listarTodos() {
+
         return vehiculoRepository.findAll();
     }
 

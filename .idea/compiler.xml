@@ -10,6 +10,15 @@
         <module name="ms_Automovil" />
         <module name="ms_Cliente" />
       </profile>
+      <profile name="Annotation profile for ms_Mecanico" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="ms_Mecanico" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
@@ -17,6 +26,7 @@
       <module name="ms_Automovil" options="-parameters" />
       <module name="ms_Cliente" options="-parameters" />
       <module name="ms_EurekaServer" options="-parameters" />
+      <module name="ms_Mecanico" options="-parameters" />
     </option>
   </component>
 </project>
