@@ -63,11 +63,16 @@ public class MecanicoService {
     }
 
 
+
+    //Actualizar
+
     @Transactional
     public Mecanico guardar(Mecanico nuevoMecanico) {
         log.info("Guardando nuevo mecanico con RUT: {}", nuevoMecanico.getRut());
         return mecanicoRepository.save(nuevoMecanico);
     }
+
+
 
 
 

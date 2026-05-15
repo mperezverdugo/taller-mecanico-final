@@ -13,8 +13,14 @@ import java.util.List;
 @RequestMapping("/api/vehiculos")
 public class VehiculoController {
 
+
+    //Creacion del objeto que viene del Service
+
     @Autowired
     private VehiculoService vehiculoService;
+
+
+    //Listar todos los Vehiculos
 
     @GetMapping
     public List<Vehiculo> listar() {

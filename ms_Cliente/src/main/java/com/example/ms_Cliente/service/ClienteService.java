@@ -16,7 +16,15 @@ import java.util.List;
 @Slf4j
 public class ClienteService {
 
+
+
+    //Creacion del objeto que viene del Repository
+
     private final ClienteRepository clienteRepository;
+
+
+
+    // Obtener todos los clientes
 
     public List<Cliente> obtenerTodos() {
         log.info("Obteniendo lista de todos los clientes");
@@ -25,7 +33,7 @@ public class ClienteService {
 
 
     //Buscar por id
-    // Cambiamos a Cliente directamente. Si no existe, lanza el error aquí.
+
     public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> {
@@ -36,6 +44,7 @@ public class ClienteService {
 
 
     //Guardar
+
     @Transactional
     public Cliente guardar(Cliente cliente) {
         log.info("Guardando nuevo cliente con RUT: {}", cliente.getRut());
@@ -44,9 +53,9 @@ public class ClienteService {
 
 
     //Eliminar
+
     @Transactional
     public void eliminar(Long id) {
-        // Primero usamos el método de arriba para validar si existe
         Cliente cliente = buscarPorId(id);
         log.info("Eliminando cliente con ID: {}", id);
         clienteRepository.delete(cliente);
@@ -54,6 +63,7 @@ public class ClienteService {
 
 
     //Actualizar
+
     @Transactional
     public Cliente actualizar(Long id, Cliente clienteActualizado) {
 

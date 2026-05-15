@@ -11,13 +11,22 @@ import java.util.List;
 
 @Service
 public class VehiculoService {
+
+    //Creacion del objeto que viene del Repository
+
     @Autowired
     private VehiculoRepository vehiculoRepository;
+
+
+    // Obtener todos los Vehiculos
 
     public List<Vehiculo> listarTodos() {
 
         return vehiculoRepository.findAll();
     }
+
+
+    //Guardar
 
     public Vehiculo guardar(Vehiculo vehiculo) {
         // Validar si la patente ya existe antes de guardar (Regla de negocio extra)
@@ -28,10 +37,18 @@ public class VehiculoService {
         return vehiculoRepository.save(vehiculo);
     }
 
+
+
+    //Buscar por ID
+
     public Vehiculo buscarPorId(Long id) {
         return vehiculoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehículo con ID " + id + " no encontrado."));
     }
+
+
+
+    //Buscar por Patente
 
     public Vehiculo buscarPorPatente(String patente) {
         Vehiculo v = vehiculoRepository.findByPatente(patente.toUpperCase());
@@ -40,6 +57,10 @@ public class VehiculoService {
         }
         return v;
     }
+
+
+
+    //Actualizar
 
     public Vehiculo actualizar(Long id, Vehiculo detalles) {
         Vehiculo vehiculo = buscarPorId(id); // Si no existe, buscarPorId ya lanza el 404 por nosotros
@@ -50,6 +71,9 @@ public class VehiculoService {
         vehiculo.setClienteId(detalles.getClienteId());
         return vehiculoRepository.save(vehiculo);
     }
+
+
+    //Eliminar
 
     public void eliminar(Long id) {
         Vehiculo vehiculo = buscarPorId(id); // Validamos que exista antes de intentar borrar

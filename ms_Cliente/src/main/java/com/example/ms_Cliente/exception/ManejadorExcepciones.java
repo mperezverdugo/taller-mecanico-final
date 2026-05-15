@@ -13,7 +13,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class ManejadorExcepciones {
 
-    // Radar para errores que nosotros lanzamos manualmente (ej: 404 No Encontrado)
+    // Manejo de excepciones
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, String>> manejarErroresDeNegocio(ResponseStatusException ex) {
         Map<String, String> respuesta = new HashMap<>();
@@ -21,7 +22,8 @@ public class ManejadorExcepciones {
         return new ResponseEntity<>(respuesta, ex.getStatusCode());
     }
 
-    // Radar para errores de validación (ej: @NotBlank, @Size)
+    // Manejo de excepciones para Validaciones
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> manejarValidaciones(MethodArgumentNotValidException ex) {
         Map<String, String> respuesta = new HashMap<>();
