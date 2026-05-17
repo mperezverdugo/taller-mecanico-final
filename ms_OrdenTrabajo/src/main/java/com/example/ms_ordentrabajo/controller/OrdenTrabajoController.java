@@ -35,4 +35,49 @@ public class OrdenTrabajoController {
         }
         return ResponseEntity.ok(ordenes); // 200 con la lista
     }
+
+    // Endpoint para buscar una orden única por ID (GET /api/ordenes/1)
+    @GetMapping("/{id}")
+    public ResponseEntity<OrdenTrabajo> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(ordenTrabajoService.obtenerPorId(id));
+    }
+
+    // Endpoint para buscar órdenes de una patente (GET /api/ordenes/vehiculo/BJKL-45)
+    @GetMapping("/vehiculo/{patente}")
+    public ResponseEntity<List<OrdenTrabajo>> buscarPorPatente(@PathVariable String patente) {
+        List<OrdenTrabajo> ordenes = ordenTrabajoService.obtenerPorPatente(patente);
+        if (ordenes.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 si ese auto no tiene historial
+        }
+        return ResponseEntity.ok(ordenes); // 200 con la lista de órdenes del auto
+    }
+
+    // Endpoint para actualizar el estado (PATCH /api/ordenes/1/estado?nuevo=EN_PROCESO)
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<OrdenTrabajo> cambiarEstado(@PathVariable Long id, @RequestParam String nuevo) {
+        OrdenTrabajo ordenActualizada = ordenTrabajoService.actualizarEstadoOrden(id, nuevo);
+        return ResponseEntity.ok(ordenActualizada);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+

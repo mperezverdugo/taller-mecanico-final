@@ -40,22 +40,27 @@ public class VehiculoService {
     //Guardar
 
     public Vehiculo guardar(Vehiculo vehiculo) {
-        // Revision de la patente
         if (vehiculoRepository.findByPatente(vehiculo.getPatente().toUpperCase()) != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La patente ya está registrada.");
         }
 
-        // Revision de la existencia del cliente en ms_cliente
+        // validación estricta del cliente
         try {
-            // Pregunta a ms_Cliente por este ID
-            clienteFeignClient.obtenerClientePorId(vehiculo.getClienteId());
+            var cliente = clienteFeignClient.obtenerClientePorId(vehiculo.getClienteId());
+
+            // Si el servicio de clientes responde 200 pero el objeto viene vacío (null)
+            if (cliente == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se puede registrar el vehículo: El cliente con ID " + vehiculo.getClienteId() + " no existe.");
+            }
+        } catch (ResponseStatusException ex) {
+            throw ex; // Re-lanza la excepción de arriba
         } catch (Exception e) {
-            // Si ms_Cliente dice "ese ID no existe", se detiene el guardado
+            // Ataja fallos de red, errores 404/500 de Feign
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "No se puede registrar el vehículo: El cliente con ID " + vehiculo.getClienteId() + " no existe.");
+                    "No se puede registrar el vehículo: El cliente con ID " + vehiculo.getClienteId() + " no responde o no existe.");
         }
 
-        // GUARDAR
         vehiculo.setPatente(vehiculo.getPatente().toUpperCase());
         return vehiculoRepository.save(vehiculo);
     }
@@ -88,21 +93,25 @@ public class VehiculoService {
     //Actualizar
 
     public Vehiculo actualizar(Long id, Vehiculo detalles) {
-        Vehiculo vehiculo = buscarPorId(id); // Valida que el auto exista
+        Vehiculo vehiculo = buscarPorId(id);
 
-        // Antes de cambiar el dueño, se verifica que el nuevo cliente exista
         try {
-            clienteFeignClient.obtenerClientePorId(detalles.getClienteId());
+            var cliente = clienteFeignClient.obtenerClientePorId(detalles.getClienteId());
+            if (cliente == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No se puede actualizar: El cliente con ID " + detalles.getClienteId() + " no existe.");
+            }
+        } catch (ResponseStatusException ex) {
+            throw ex;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "No se puede actualizar: El cliente con ID " + detalles.getClienteId() + " no existe.");
+                    "No se puede actualizar: El cliente con ID " + detalles.getClienteId() + " no existe o el servicio no responde.");
         }
 
-        // Si el cliente existe, actualizamos los datos
         vehiculo.setMarca(detalles.getMarca());
         vehiculo.setModelo(detalles.getModelo());
         vehiculo.setAnio(detalles.getAnio());
-        vehiculo.setClienteId(detalles.getClienteId()); // Se asigna el nuevo ID validado
+        vehiculo.setClienteId(detalles.getClienteId());
 
         return vehiculoRepository.save(vehiculo);
     }
