@@ -9,6 +9,8 @@
         <option value="$PROJECT_DIR$/ms_Automovil/pom.xml" />
         <option value="$PROJECT_DIR$/ms_EurekaServer/pom.xml" />
         <option value="$PROJECT_DIR$/ms_Mecanico/pom.xml" />
+        <option value="$PROJECT_DIR$/ms_OrdenTrabajo/pom.xml" />
+        <option value="$PROJECT_DIR$/ms_Gateway/pom.xml" />
       </list>
     </option>
   </component>

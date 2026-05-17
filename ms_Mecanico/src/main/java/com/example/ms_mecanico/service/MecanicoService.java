@@ -16,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MecanicoService {
 
+
+    //Creacion del objeto que viene de Repository
     private final MecanicoRepository mecanicoRepository;
 
 
@@ -64,7 +66,7 @@ public class MecanicoService {
 
 
 
-    //Actualizar
+    //Guardar
 
     @Transactional
     public Mecanico guardar(Mecanico nuevoMecanico) {
