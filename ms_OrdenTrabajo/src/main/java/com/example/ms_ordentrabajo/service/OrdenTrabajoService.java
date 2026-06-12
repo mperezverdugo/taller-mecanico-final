@@ -7,6 +7,7 @@ import com.example.ms_ordentrabajo.model.OrdenTrabajo;
 import com.example.ms_ordentrabajo.model.Repuesto;
 import com.example.ms_ordentrabajo.repository.OrdenTrabajoRepository;
 import com.example.ms_ordentrabajo.repository.RepuestoRepository;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,8 @@ public class OrdenTrabajoService {
             log.warn("Nota: Esta orden se va a registrar sin repuestos.");
         }
 
+
+
         //Datos guardados de la orden
         orden.setFechaIngreso(LocalDate.now());
         orden.setCostoEstimado(total);
@@ -130,6 +133,7 @@ public class OrdenTrabajoService {
     public OrdenTrabajo actualizarEstadoOrden(Long id, String nuevoEstado) {
         log.info("Preparando cambio de estado para la orden número: {}", id);
 
+
         OrdenTrabajo orden = obtenerPorId(id);
         String estadoAnterior = orden.getEstado();
         orden.setEstado(nuevoEstado.toUpperCase());
@@ -140,6 +144,10 @@ public class OrdenTrabajoService {
         log.info("El estado de la orden se actualizó correctamente en la base de datos.");
         return ordenActualizada;
     }
+
+
+
+
 }
 
 

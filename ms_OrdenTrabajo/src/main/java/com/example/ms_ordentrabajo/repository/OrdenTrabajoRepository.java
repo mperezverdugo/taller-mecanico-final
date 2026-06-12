@@ -10,4 +10,5 @@ public interface OrdenTrabajoRepository extends JpaRepository<OrdenTrabajo, Long
 
 
     List<OrdenTrabajo> findByPatenteVehiculoIgnoreCase(String patenteVehiculo);
+
 }

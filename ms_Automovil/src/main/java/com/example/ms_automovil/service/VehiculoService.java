@@ -50,9 +50,9 @@ public class VehiculoService {
 
             // Si el servicio de clientes responde 200 pero el objeto viene vacío (null)
             if (cliente == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No se puede registrar el vehículo: El cliente con ID " + vehiculo.getClienteId() + " no existe.");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se puede registrar el vehículo: El cliente con ID " + vehiculo.getClienteId() + " no existe.");
             }
+
         } catch (ResponseStatusException ex) {
             throw ex; // Re-lanza la excepción de arriba
         } catch (Exception e) {

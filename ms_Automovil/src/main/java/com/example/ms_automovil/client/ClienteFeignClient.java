@@ -13,3 +13,5 @@ public interface ClienteFeignClient {
     @GetMapping("/api/clientes/{id}")
     ClienteDTO obtenerClientePorId(@PathVariable("id") Long id);
 }
+
+
