@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vehiculos")
+@CrossOrigin(origins = "*")
 @Tag(name = "Módulo Vehículos", description = "Operaciones CRUD para la gestión y control del parque automotriz del taller")
 public class VehiculoController {
 
