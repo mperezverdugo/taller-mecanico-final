@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/mecanicos")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Módulo Mecánicos", description = "Operaciones CRUD para la administración del personal técnico del taller")
 public class MecanicoController {
 

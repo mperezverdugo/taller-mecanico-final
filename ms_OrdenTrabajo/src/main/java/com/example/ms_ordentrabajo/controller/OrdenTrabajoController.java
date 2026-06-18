@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordenes")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Módulo Órdenes de Trabajo", description = "Operaciones del núcleo de negocio del taller: Emisión, costeo de repuestos e historial técnico")
 public class OrdenTrabajoController {
 

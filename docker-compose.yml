@@ -51,6 +51,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework  # <-- ESCUCHA AL GATEWAY
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -71,6 +72,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework  # <-- ESCUCHA AL GATEWAY
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -91,6 +93,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework  # <-- ESCUCHA AL GATEWAY
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -111,6 +114,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework  # <-- ESCUCHA AL GATEWAY
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -128,6 +132,7 @@ services:
       - taller-network
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework  # <-- SINCRO CON TU PROPERTIES
     depends_on:
       - ms-eurekaserver
 
