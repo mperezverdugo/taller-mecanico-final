@@ -1,0 +1,135 @@
+version: '3.8'
+
+networks:
+  taller-network:
+    driver: bridge
+
+services:
+  # 1. BASE DE DATOS UNIFICADA
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - taller-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. SERVIDOR DE DESCUBRIMIENTO EUREKA
+  ms-eurekaserver:
+    build:
+      context: ./ms_EurekaServer
+    container_name: ms-eurekaserver
+    ports:
+      - "8761:8761"
+    networks:
+      - taller-network
+    environment:
+      - SPRING_EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - SPRING_EUREKA_CLIENT_FETCH_REGISTRY=false
+
+  # 3. MICROSERVICIO CLIENTE (Puerto 8081)
+  ms-cliente:
+    build:
+      context: ./ms_Cliente
+    container_name: ms-cliente
+    ports:
+      - "8081:8081"
+    networks:
+      - taller-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_cliente?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ms-eurekaserver:
+        condition: service_started
+
+  # 4. MICROSERVICIO AUTOMOVIL (Puerto 8082)
+  ms-automovil:
+    build:
+      context: ./ms_Automovil
+    container_name: ms-automovil
+    ports:
+      - "8082:8082"
+    networks:
+      - taller-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_automovil?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ms-eurekaserver:
+        condition: service_started
+
+  # 5. MICROSERVICIO MECANICO (Puerto 8083)
+  ms-mecanico:
+    build:
+      context: ./ms_Mecanico
+    container_name: ms-mecanico
+    ports:
+      - "8083:8083"
+    networks:
+      - taller-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_mecanico?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ms-eurekaserver:
+        condition: service_started
+
+  # 6. MICROSERVICIO ORDEN DE TRABAJO (Puerto 8084)
+  ms-ordentrabajo:
+    build:
+      context: ./ms_OrdenTrabajo
+    container_name: ms-ordentrabajo
+    ports:
+      - "8084:8084"
+    networks:
+      - taller-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_ordentrabajo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ms-eurekaserver:
+        condition: service_started
+
+  # 7. API GATEWAY ROUTER (Puerto 8080)
+  ms-gateway:
+    build:
+      context: ./ms_Gateway
+    container_name: ms-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - taller-network
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://ms-eurekaserver:8761/eureka/
+    depends_on:
+      - ms-eurekaserver
+
+volumes:
+  mysql_data:
